@@ -34,7 +34,7 @@ public class GlobalExceptionFilter implements Filter {
         } catch (ValidationException e) {
             throw e;
         } catch (UnauthorizedException e) {
-            req.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(req, resp);
+            resp.sendRedirect("/auth/login");
         } catch (AppException e) {
 
             ExceptionResponse error = ExceptionMapper.toExceptionResponse(e);

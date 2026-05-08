@@ -5,6 +5,7 @@ import com.advprog.servletecommerce.application.security.SessionManager;
 import com.advprog.servletecommerce.application.service.UserService;
 import com.advprog.servletecommerce.domain.dto.AuthResponseDto;
 import com.advprog.servletecommerce.domain.dto.LoginRequestDto;
+import com.advprog.servletecommerce.domain.enums.Role;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -46,6 +47,13 @@ public class LoginController extends HttpServlet {
             AuthResponseDto responseDto = userService.login(dto);
 
             SessionManager.attachSession(resp, redisClient, responseDto.id());
+
+            Role userRole = responseDto.role();
+
+            if (userRole.equals(Role.ADMIN)) {
+                resp.sendRedirect("/dashboard");
+                return;
+            }
 
             resp.sendRedirect("/home");
 

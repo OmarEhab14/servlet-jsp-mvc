@@ -1,7 +1,6 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
 
 import java.io.*;
-import java.util.UUID;
 
 import com.advprog.servletecommerce.application.exceptions.ValidationException;
 import com.advprog.servletecommerce.application.security.SessionManager;
@@ -9,12 +8,10 @@ import com.advprog.servletecommerce.application.service.UserService;
 import com.advprog.servletecommerce.application.service.impl.UserServiceImpl;
 import com.advprog.servletecommerce.domain.dto.AuthResponseDto;
 import com.advprog.servletecommerce.domain.dto.RegisterRequestDto;
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import redis.clients.jedis.RedisClient;
-import redis.clients.jedis.params.SetParams;
 
 @WebServlet(name = "registerServlet", value = "/auth/register")
 public class RegisterController extends HttpServlet {

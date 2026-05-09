@@ -2,6 +2,7 @@ package com.advprog.servletecommerce.infrastructure.controllers;
 
 import com.advprog.servletecommerce.application.service.UserService;
 import com.advprog.servletecommerce.application.service.impl.UserServiceImpl;
+import com.advprog.servletecommerce.configs.AppConfig;
 import com.advprog.servletecommerce.domain.entities.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,8 +17,7 @@ public class DashboardController extends HttpServlet {
     private UserService userService;
     @Override
     public void init() throws ServletException {
-        userService = (UserServiceImpl) getServletContext()
-                .getAttribute("userService");
+        userService = AppConfig.getUserService();
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

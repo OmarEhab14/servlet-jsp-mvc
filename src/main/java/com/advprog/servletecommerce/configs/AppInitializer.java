@@ -16,28 +16,29 @@ import javax.sql.DataSource;
 
 @WebListener
 public class AppInitializer implements ServletContextListener {
-    private static final Logger log = LoggerFactory.getLogger(AppInitializer.class);
+    public static final Logger log = LoggerFactory.getLogger(AppInitializer.class);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        AppConfig.init();
         // Database datasource
-        DataSource dataSource = DatabaseConfig.getDataSource();
+//        DataSource dataSource = DatabaseConfig.getDataSource();
 
         // Redis client
-        RedisClient redisClient = RedisConfig.getRedisClient();
-        sce.getServletContext().setAttribute("redisClient", redisClient);
+//        RedisClient redisClient = RedisConfig.getRedisClient();
+//        sce.getServletContext().setAttribute("redisClient", redisClient);
 
         // DAOs
-        UserDao userDao = new UserDaoImpl(dataSource);
+//        UserDao userDao = new UserDaoImpl(dataSource);
 
         // Validators
-        UserValidator validator = new UserValidator(userDao);
+//        UserValidator validator = new UserValidator(userDao);
 
         // Services
-        UserService userService = new UserServiceImpl(userDao, validator);
+//        UserService userService = new UserServiceImpl(userDao, validator);
 
         // Registering service
-        sce.getServletContext().setAttribute("userService", userService);
+//        sce.getServletContext().setAttribute("userService", userService);
     }
     @Override
     public void contextDestroyed(ServletContextEvent sce) {

@@ -7,6 +7,7 @@ import com.advprog.servletecommerce.application.exceptions.ValidationException;
 import com.advprog.servletecommerce.application.security.SessionManager;
 import com.advprog.servletecommerce.application.service.UserService;
 import com.advprog.servletecommerce.application.service.impl.UserServiceImpl;
+import com.advprog.servletecommerce.configs.AppConfig;
 import com.advprog.servletecommerce.domain.dto.AuthResponseDto;
 import com.advprog.servletecommerce.domain.dto.RegisterRequestDto;
 import jakarta.servlet.ServletContext;
@@ -21,8 +22,7 @@ public class RegisterController extends HttpServlet {
     private UserService userService;
     private RedisClient redisClient;
     public void init() {
-        userService = (UserServiceImpl) getServletContext()
-                .getAttribute("userService");
+        userService = AppConfig.getUserService();
         redisClient = (RedisClient) getServletContext()
                 .getAttribute("redisClient");
     }

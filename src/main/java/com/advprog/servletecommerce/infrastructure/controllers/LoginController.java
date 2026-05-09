@@ -3,6 +3,7 @@ package com.advprog.servletecommerce.infrastructure.controllers;
 import com.advprog.servletecommerce.application.exceptions.ValidationException;
 import com.advprog.servletecommerce.application.security.SessionManager;
 import com.advprog.servletecommerce.application.service.UserService;
+import com.advprog.servletecommerce.configs.AppConfig;
 import com.advprog.servletecommerce.domain.dto.AuthResponseDto;
 import com.advprog.servletecommerce.domain.dto.LoginRequestDto;
 import com.advprog.servletecommerce.domain.enums.Role;
@@ -21,10 +22,8 @@ public class LoginController extends HttpServlet {
 
     @Override
     public void init() {
-        userService = (UserService) getServletContext()
-                .getAttribute("userService");
-        redisClient = (RedisClient) getServletContext()
-                .getAttribute("redisClient");
+        userService = AppConfig.getUserService();
+        redisClient = AppConfig.getRedisClient();
     }
 
     @Override

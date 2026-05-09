@@ -51,7 +51,7 @@ public class GlobalExceptionFilter implements Filter {
             ExceptionResponse error = ExceptionResponse.builder()
                             .status(500)
                             .title("Internal Server Error")
-                            .detail(e.getMessage())
+                            .detail("Something went wrong")
                             .timeStamp(Instant.now())
                             .errors(Map.of())
                             .build();

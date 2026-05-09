@@ -10,4 +10,5 @@ public interface ProductDao {
     Product save(Product product);
     List<Product> findAll();
     boolean deleteById(Long id);
+    boolean existsById(Long id);
 }

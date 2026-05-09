@@ -104,13 +104,29 @@ public class ProductDoaImpl implements ProductDao {
         }
         return false;
     }
+
+    @Override
+    public boolean existsById(Long id) {
+        String query = "SELECT 1 FROM products WHERE id = ? LIMIT 1";
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next();
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            return false;
+        }
+    }
+
     private Product mapResultSetToProduct(ResultSet rs) throws SQLException {
         return new Product(
                 rs.getLong("id"),
                 rs.getString("name"),
                 rs.getString("description"),
                 rs.getDouble("price"),
-                rs.getInt("stockQuantity")
+                rs.getInt("stock_quantity")
         );
     }
 }

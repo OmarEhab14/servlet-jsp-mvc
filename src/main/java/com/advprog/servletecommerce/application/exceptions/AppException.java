@@ -19,6 +19,14 @@ public class AppException extends RuntimeException {
         this.errors = errors.isEmpty() ? Collections.emptyMap() : errors;
     }
 
+    public AppException(int status, String message, String detail) {
+        super(message);
+        this.message = message;
+        this.status = status;
+        this.detail = detail;
+        this.errors = Collections.emptyMap();
+    }
+
     @Override
     public String getMessage() {
         return message;

@@ -16,7 +16,8 @@ public enum HttpStatus {
     NOT_FOUND(404, "Not Found"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
     NOT_IMPLEMENTED(501, "Not Implemented"),
-    SERVICE_UNAVAILABLE(503, "Service Unavailable");
+    SERVICE_UNAVAILABLE(503, "Service Unavailable"),
+    RATE_LIMITING(429, "Too Many Requests");
 
     private final int code;
     private final String description;

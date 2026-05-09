@@ -4,14 +4,17 @@ import com.advprog.servletecommerce.application.service.ReviewService;
 import com.advprog.servletecommerce.configs.AppConfig;
 import com.advprog.servletecommerce.domain.dto.CreateReviewRequestDto;
 import com.advprog.servletecommerce.domain.entities.Review;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Builder;
 
 import java.io.IOException;
-@Builder
+import java.util.List;
 
+@Builder
+@WebServlet("/reviews/*")
 public class ReviewController extends HttpServlet {
     private ReviewService reviewService;
     @Override
@@ -44,6 +47,26 @@ public class ReviewController extends HttpServlet {
 
 //            request.getRequestDispatcher("/WEB-INF/views/auth/register.jsp")
 //                    .forward(request, response);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        try {
+            String path = request.getPathInfo();
+
+            // /reviews/product/{id}
+            if (path != null && path.startsWith("/product/")) {
+
+                Long productId = Long.parseLong(path.split("/")[2]);
+
+                List<Review> reviews = reviewService.getProductReviews(productId);
+
+            }
+
+        } catch (Exception e) {
         }
     }
 }

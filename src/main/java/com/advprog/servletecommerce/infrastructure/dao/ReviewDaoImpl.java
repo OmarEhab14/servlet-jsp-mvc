@@ -4,15 +4,14 @@ import com.advprog.servletecommerce.application.exceptions.InternalServerErrorEx
 import com.advprog.servletecommerce.domain.dao.ReviewDao;
 import com.advprog.servletecommerce.domain.entities.Review;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.advprog.servletecommerce.configs.AppInitializer.log;
-
-
+@Slf4j
 @RequiredArgsConstructor
 public class ReviewDaoImpl implements ReviewDao {
     private final DataSource dataSource;

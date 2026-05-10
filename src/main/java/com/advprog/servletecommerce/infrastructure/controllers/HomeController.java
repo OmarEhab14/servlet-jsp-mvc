@@ -1,6 +1,7 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
 
 import com.advprog.servletecommerce.application.service.UserService;
+import com.advprog.servletecommerce.application.service.impl.UserServiceImpl;
 import com.advprog.servletecommerce.domain.entities.User;
 import com.advprog.servletecommerce.domain.enums.Role;
 import jakarta.servlet.ServletException;
@@ -16,7 +17,8 @@ public class HomeController extends HttpServlet {
     private UserService userService;
     @Override
     public void init() throws ServletException {
-        userService = (UserService) getServletContext().getAttribute("userService");
+        userService = (UserServiceImpl) getServletContext()
+                .getAttribute("userService");
     }
 
     @Override

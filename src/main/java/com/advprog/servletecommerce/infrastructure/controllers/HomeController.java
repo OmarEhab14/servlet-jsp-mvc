@@ -35,10 +35,7 @@ public class HomeController extends HttpServlet {
         Long userId = (Long) req.getAttribute("userId");
         User user = userService.getUserById(userId);
         Role role = user.getRole();
-        List<ProductDto> products = productService.getAllProducts()
-                                                  .stream()
-                                                  .map(ProductMapper::toDto)
-                                                  .toList();
+        List<ProductDto> products = productService.getAllProducts();
         req.setAttribute("products",products);
         if (role == Role.ADMIN) {
             req.getRequestDispatcher(req.getContextPath() + "/dashboard").forward(req,resp);

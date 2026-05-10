@@ -37,12 +37,9 @@ public class ProductController extends HttpServlet {
 
         try {
             Long productId = Long.parseLong(idParam);
-            Product product = productService.getProduct(productId);
+            ProductDetailsDto product = productService.getProduct(productId);
 
-
-            ProductDetailsDto dto = ProductMapper.toDetailsDto(product);
-            req.setAttribute("product", dto);
-
+            req.setAttribute("product", product);
             req.getRequestDispatcher("/WEB-INF/views/product-detail.jsp").forward(req, resp);
 
         } catch (NumberFormatException e) {

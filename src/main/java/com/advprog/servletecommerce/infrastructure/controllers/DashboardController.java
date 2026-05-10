@@ -1,6 +1,6 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
 
-import com.advprog.servletecommerce.application.mappers.ProductMapper;
+
 import com.advprog.servletecommerce.application.service.ProductService;
 import com.advprog.servletecommerce.application.service.UserService;
 import com.advprog.servletecommerce.application.service.impl.ProductServiceImpl;
@@ -32,10 +32,7 @@ public class DashboardController extends HttpServlet {
         Long userId = (Long) req.getAttribute("userId");
         User user = userService.getUserById(userId);
         req.setAttribute("firstName", user.getFirstName());
-        List<ProductDto> products = productService.getAllProducts()
-                                                  .stream()
-                                                  .map(ProductMapper::toDto)
-                                                  .toList();
+        List<ProductDto> products = productService.getAllProducts();
         req.setAttribute("products", products);
         req.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
     }

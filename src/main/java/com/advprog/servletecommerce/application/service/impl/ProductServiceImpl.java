@@ -2,12 +2,14 @@ package com.advprog.servletecommerce.application.service.impl;
 
 import java.util.List;
 
-import com.advprog.servletecommerce.application.enums.HttpStatus;
-import com.advprog.servletecommerce.application.exceptions.AppException;
+
 import com.advprog.servletecommerce.application.exceptions.NotFoundException;
 import com.advprog.servletecommerce.application.exceptions.ProductAlreadyExistsException;
+import com.advprog.servletecommerce.application.mappers.ProductMapper;
 import com.advprog.servletecommerce.application.service.ProductService;
 import com.advprog.servletecommerce.domain.dao.ProductDao;
+import com.advprog.servletecommerce.domain.dto.ProductDetailsDto;
+import com.advprog.servletecommerce.domain.dto.ProductDto;
 import com.advprog.servletecommerce.domain.entities.Product;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,13 +27,17 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getProduct(Long id) {
-        return productDao.findById(id).orElseThrow(()->new NotFoundException("Product not Found"));
+    public ProductDetailsDto getProduct(Long id) {
+        Product p=productDao.findById(id).orElseThrow(()->new NotFoundException("Product not Found"));
+        return ProductMapper.toDetailsDto(p);
     }
 
     @Override
-    public List<Product> getAllProducts() {
-        return productDao.findAll();
+    public List<ProductDto> getAllProducts() {
+        List<Product> p= productDao.findAll();
+        return p.stream()
+               .map(ProductMapper::toDto)
+               .toList();
     }
 
     @Override

@@ -28,19 +28,21 @@ public class ProductServiceImpl implements ProductService {
     private final ObjectMapper mapper = new ObjectMapper();
     private static final String PRODUCT_CACHE_KEY = "products:all";
     private static final int CACHE_EXPIRY_SECONDS = 3600; // 1 hour
+
     @Override
     public Product createProduct(Product product) {
-        if(productDao.existsById(product.getId())){
-            throw new ProductAlreadyExistsException(product.getId());
-        }
+        Product saved = productDao.save(product);
+
         redis.del(PRODUCT_CACHE_KEY);
-        log.info("Deleted products from cache");
-       return productDao.save(product);
+        log.info("Invalidated product cache after creation");
+
+        return saved;
     }
 
     @Override
     public ProductDetailsDto getProduct(Long id) {
         String key="Product:"+id;
+        log.info("ENTER getProduct({})", id);
         try {
             String cachedData = redis.get(key);
             if (cachedData != null) {
@@ -48,7 +50,7 @@ public class ProductServiceImpl implements ProductService {
                 return mapper.readValue(cachedData, ProductDetailsDto.class);
             }
             log.info("Retrieve product {} from db",id);
-            Product p = productDao.findById(id).orElseThrow(() -> new NotFoundException("Product not Found"));
+            ProductDetails p = productDao.findById(id).orElseThrow(() -> new NotFoundException("Product not Found"));
             ProductDetailsDto dto=ProductMapper.toDetailsDto(p);
             redis.set(key, mapper.writeValueAsString(dto), SetParams.setParams().ex(CACHE_EXPIRY_SECONDS));
             return dto;

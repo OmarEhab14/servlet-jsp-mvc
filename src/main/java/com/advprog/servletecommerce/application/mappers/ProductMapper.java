@@ -3,6 +3,7 @@ package com.advprog.servletecommerce.application.mappers;
 import com.advprog.servletecommerce.domain.dto.ProductDetailsDto;
 import com.advprog.servletecommerce.domain.dto.ProductDto;
 import com.advprog.servletecommerce.domain.entities.Product;
+import com.advprog.servletecommerce.domain.entities.ProductDetails;
 
 public class ProductMapper {
     public static Product toEntity(ProductDto productDto) {
@@ -29,6 +30,7 @@ public class ProductMapper {
                       .description(productDetailsDto.description())
                       .imageUrl(productDetailsDto.imageUrl())
                       .stockQuantity(productDetailsDto.stockQuantity())
+                      .imageUrl(productDetailsDto.imageUrl())
                       .build();
     }
     public static ProductDetailsDto toDetailsDto(ProductDetails product){
@@ -37,8 +39,8 @@ public class ProductMapper {
                          .name(product.getName())
                          .price(product.getPrice())
                          .description(product.getDescription())
-                         .imageUrl(product.getImageUrl())
                          .stockQuantity(product.getStockQuantity())
+                         .imageUrl(product.getImageUrl())
                          .build();
     }
 }

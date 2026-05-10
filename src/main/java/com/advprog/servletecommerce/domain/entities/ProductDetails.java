@@ -19,5 +19,6 @@ public class ProductDetails {
     private String description;
     private Double price;
     private Integer stockQuantity;
+    private String imageUrl;
     private List<Review> reviews;
 }

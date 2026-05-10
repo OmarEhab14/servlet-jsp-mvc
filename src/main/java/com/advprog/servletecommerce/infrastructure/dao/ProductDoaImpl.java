@@ -1,9 +1,6 @@
 package com.advprog.servletecommerce.infrastructure.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 import javax.sql.DataSource;
@@ -26,7 +23,7 @@ public class ProductDoaImpl implements ProductDao {
 //        String query = "SELECT * FROM products LEFT JOIN reviews ON product_id = reviews.product_id";
         String query = """
                     SELECT 
-                        p.id as p_id, p.name, p.description, p.price, p.stock_quantity,
+                        p.id as p_id, p.name, p.description, p.price, p.stock_quantity,p.image_url,
                         r.id as r_id, r.user_id, r.product_id, r.rating, r.comment, r.created_at
                         FROM products p
                         LEFT JOIN reviews r ON p.id = r.product_id
@@ -48,10 +45,8 @@ public class ProductDoaImpl implements ProductDao {
                     }
 
 
-                    if (!rs.wasNull()) {
-
-                        Review review = mapResultSetToReview(rs);
-
+                    Review review = mapResultSetToReview(rs);
+                    if (review != null) {
                         productDetails.getReviews().add(review);
                     }
                 }
@@ -67,9 +62,9 @@ public class ProductDoaImpl implements ProductDao {
     @Override
     public Product save(Product product) {
         String query = """
-                INSERT INTO products (name, description, price, stock_quantity)"
+                INSERT INTO products (name, description, price, stock_quantity, image_url)
                 VALUES
-                (?, ?, ?, ?)
+                (?, ?, ?, ?, ?)
                 """;
         try (
                 Connection connection = dataSource.getConnection();
@@ -79,6 +74,7 @@ public class ProductDoaImpl implements ProductDao {
             stmt.setString(2, product.getDescription());
             stmt.setDouble(3, product.getPrice());
             stmt.setInt(4, product.getStockQuantity());
+            stmt.setString(5, product.getImageUrl());
 
             stmt.executeUpdate();
             try (ResultSet rs = stmt.getGeneratedKeys()) {
@@ -120,16 +116,35 @@ public class ProductDoaImpl implements ProductDao {
 
     @Override
     public boolean deleteById(Long id) {
-        String query = "DELETE FROM products WHERE id = ?";
-        try (Connection conn = dataSource.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setLong(1, id);
-            int affectedRows = stmt.executeUpdate();
-            return affectedRows > 0;
+        String deleteReviews = "DELETE FROM reviews WHERE product_id = ?";
+        String deleteProduct = "DELETE FROM products WHERE id = ?";
+
+        try (Connection conn = dataSource.getConnection()) {
+
+            conn.setAutoCommit(false); // important: transaction
+
+            try (PreparedStatement reviewStmt = conn.prepareStatement(deleteReviews)) {
+                reviewStmt.setLong(1, id);
+                reviewStmt.executeUpdate();
+            }
+
+            try (PreparedStatement productStmt = conn.prepareStatement(deleteProduct)) {
+                productStmt.setLong(1, id);
+                int affectedRows = productStmt.executeUpdate();
+
+                if (affectedRows == 0) {
+                    conn.rollback();
+                    return false;
+                }
+            }
+
+            conn.commit();
+            return true;
+
         } catch (SQLException e) {
-            log.error(e.getMessage(), e);
+            log.error("Failed deleting product {} with reviews", id, e);
+            return false;
         }
-        return false;
     }
 
     @Override
@@ -149,7 +164,7 @@ public class ProductDoaImpl implements ProductDao {
 
     private Product mapResultSetToProduct(ResultSet rs) throws SQLException {
         return new Product(
-                rs.getLong("p_id"),
+                rs.getLong("id"),
                 rs.getString("name"),
                 rs.getString("description"),
                 rs.getDouble("price"),
@@ -163,19 +178,27 @@ public class ProductDoaImpl implements ProductDao {
                 rs.getString("description"),
                 rs.getDouble("price"),
                 rs.getInt("stock_quantity"),
+                rs.getString("image_url"),
                 reviews
         );
     }
 
     private Review mapResultSetToReview(ResultSet rs) throws SQLException {
+
+        Long reviewId = rs.getLong("r_id");
+        if (rs.wasNull()) {
+            return null;
+        }
+
+        Timestamp ts = rs.getTimestamp("created_at");
+
         return new Review(
-                rs.getLong("r_id"),
+                reviewId,
                 rs.getLong("user_id"),
                 rs.getLong("product_id"),
                 rs.getInt("rating"),
                 rs.getString("comment"),
-                rs.getTimestamp("created_at").toLocalDateTime()
-
+                ts != null ? ts.toLocalDateTime() : null
         );
     }
 }

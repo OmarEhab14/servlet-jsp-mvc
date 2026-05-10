@@ -14,10 +14,12 @@ public enum HttpStatus {
     UNAUTHORIZED(401, "Unauthorized"),
     FORBIDDEN(403, "Forbidden"),
     NOT_FOUND(404, "Not Found"),
+    CONFLICT(409,"Conflict"),
+    RATE_LIMITING(429, "Too Many Requests"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
     NOT_IMPLEMENTED(501, "Not Implemented"),
-    SERVICE_UNAVAILABLE(503, "Service Unavailable"),
-    RATE_LIMITING(429, "Too Many Requests");
+    SERVICE_UNAVAILABLE(503, "Service Unavailable");
+
 
     private final int code;
     private final String description;

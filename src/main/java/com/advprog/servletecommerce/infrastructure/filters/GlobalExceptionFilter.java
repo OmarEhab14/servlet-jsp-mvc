@@ -1,6 +1,7 @@
 package com.advprog.servletecommerce.infrastructure.filters;
 
 import com.advprog.servletecommerce.application.exceptions.AppException;
+import com.advprog.servletecommerce.application.exceptions.ProductAlreadyExistsException;
 import com.advprog.servletecommerce.application.exceptions.UnauthorizedException;
 import com.advprog.servletecommerce.application.exceptions.ValidationException;
 import com.advprog.servletecommerce.application.exceptions.dtos.ExceptionResponse;
@@ -35,6 +36,9 @@ public class GlobalExceptionFilter implements Filter {
             throw e;
         } catch (UnauthorizedException e) {
             resp.sendRedirect("/auth/login");
+        } catch (ProductAlreadyExistsException e){
+            req.setAttribute("productError", e.getDetail());
+            req.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
         } catch (AppException e) {
 
             ExceptionResponse error = ExceptionMapper.toExceptionResponse(e);

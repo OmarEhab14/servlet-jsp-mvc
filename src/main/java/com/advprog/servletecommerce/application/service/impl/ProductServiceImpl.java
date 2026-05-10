@@ -5,6 +5,7 @@ import java.util.List;
 import com.advprog.servletecommerce.application.enums.HttpStatus;
 import com.advprog.servletecommerce.application.exceptions.AppException;
 import com.advprog.servletecommerce.application.exceptions.NotFoundException;
+import com.advprog.servletecommerce.application.exceptions.ProductAlreadyExistsException;
 import com.advprog.servletecommerce.application.service.ProductService;
 import com.advprog.servletecommerce.domain.dao.ProductDao;
 import com.advprog.servletecommerce.domain.entities.Product;
@@ -18,7 +19,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product createProduct(Product product) {
         if(productDao.existsById(product.getId())){
-            throw new RuntimeException("Product with this id already exists");
+            throw new ProductAlreadyExistsException(product.getId());
         }
        return productDao.save(product);
     }

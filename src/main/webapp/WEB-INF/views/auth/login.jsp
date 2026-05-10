@@ -1,53 +1,61 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: omar-ehab
-  Date: 5/7/26
-  Time: 11:36 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
 <html>
-<form method="post" action="/auth/login">
-  <c:if test="${error.errors['login'] != null}">
-    <div style="color: red; margin-bottom: 10px;">
-        ${error.errors['login']}
-    </div>
-  </c:if>
-  <input
-          type="email"
-          name="email"
-          value="${oldDto.email()}"
-          placeholder="Email"
-  />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <link rel="stylesheet" type="text/css"
+        href="${pageContext.request.contextPath}/css/styles.css">
+</head>
+<body>
+<div class="container">
+  <div class="form-wrapper">
+    <h2>Login</h2>
 
-  <c:if test="${error.errors['email'] != null}">
-    <span>${error.errors['email']}</span>
-  </c:if>
+    <form method="post" action="${pageContext.request.contextPath}/auth/login">
+      <c:if test="${error.errors['login'] != null}">
+        <div class="error-message">
+            ${error.errors['login']}
+        </div>
+      </c:if>
 
-  <br>
+      <div class="form-group">
+        <input
+                type="email"
+                name="email"
+                value="${oldDto.email()}"
+                placeholder="Email"
+                class="form-input"
+        />
+        <c:if test="${error.errors['email'] != null}">
+          <span class="field-error">${error.errors['email']}</span>
+        </c:if>
+      </div>
 
-  <input
-          type="password"
-          name="password"
-          placeholder="Password"
-  />
+      <div class="form-group">
+        <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                class="form-input"
+        />
+        <c:if test="${error.errors['password'] != null}">
+          <span class="field-error">${error.errors['password']}</span>
+        </c:if>
+      </div>
 
-  <c:if test="${error.errors['password'] != null}">
-    <span>${error.errors['password']}</span>
-  </c:if>
+      <button type="submit" class="btn btn-primary">
+        Login
+      </button>
+    </form>
 
-  <br>
-
-  <button type="submit">
-    Login
-  </button>
-
-</form>
-
-<p>
-  Don't have an account?
-  <a href="${pageContext.request.contextPath}/auth/register">
-    Register here
-  </a>
-</p>
+    <p class="form-footer">
+      Don't have an account?
+      <a href="${pageContext.request.contextPath}/auth/register">Register here</a>
+    </p>
+  </div>
+</div>
+</body>
 </html>

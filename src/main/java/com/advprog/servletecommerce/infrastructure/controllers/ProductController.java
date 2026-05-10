@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.advprog.servletecommerce.application.enums.HttpStatus;
 import com.advprog.servletecommerce.application.exceptions.AppException;
 import com.advprog.servletecommerce.application.exceptions.InternalServerErrorException;
+import com.advprog.servletecommerce.application.exceptions.InvalidProductIdException;
 import com.advprog.servletecommerce.application.mappers.ProductMapper;
 import com.advprog.servletecommerce.application.service.ProductService;
 import com.advprog.servletecommerce.application.service.impl.ProductServiceImpl;
@@ -45,7 +46,7 @@ public class ProductController extends HttpServlet {
             req.getRequestDispatcher("/WEB-INF/views/product-detail.jsp").forward(req, resp);
 
         } catch (NumberFormatException e) {
-            throw new AppException(HttpStatus.BAD_REQUEST.getCode(),"Invalid Product ID format.","Product id should be a number");
+            throw new InvalidProductIdException(idParam);
         }
     }
     @Override

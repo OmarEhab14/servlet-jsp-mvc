@@ -14,7 +14,7 @@ public class RateLimitingFilter implements Filter {
 
     private RedisClient redisClient;
 
-    private static final int MAX_REQUESTS = 5;
+    private static final int MAX_REQUESTS = 10;
     private static final int WINDOW_SECONDS = 10;
 
     @Override

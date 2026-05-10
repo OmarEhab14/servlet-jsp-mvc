@@ -8,15 +8,16 @@ import com.advprog.servletecommerce.infrastructure.dao.UserDaoImpl;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import redis.clients.jedis.RedisClient;
 
 import javax.sql.DataSource;
-
+@Slf4j
 @WebListener
 public class AppInitializer implements ServletContextListener {
-    private static final Logger log = LoggerFactory.getLogger(AppInitializer.class);
+//    private static final Logger log = LoggerFactory.getLogger(AppInitializer.class);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {

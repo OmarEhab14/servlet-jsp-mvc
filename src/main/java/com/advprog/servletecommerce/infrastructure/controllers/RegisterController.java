@@ -1,27 +1,26 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
 
-import java.io.*;
-
 import com.advprog.servletecommerce.application.exceptions.ValidationException;
 import com.advprog.servletecommerce.application.security.SessionManager;
 import com.advprog.servletecommerce.application.service.UserService;
-import com.advprog.servletecommerce.application.service.impl.UserServiceImpl;
 import com.advprog.servletecommerce.domain.dto.AuthResponseDto;
 import com.advprog.servletecommerce.domain.dto.RegisterRequestDto;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import redis.clients.jedis.RedisClient;
+
+import java.io.IOException;
 
 @WebServlet(name = "registerServlet", value = "/auth/register")
 public class RegisterController extends HttpServlet {
     private UserService userService;
     private RedisClient redisClient;
     public void init() {
-        userService = (UserServiceImpl) getServletContext()
-                .getAttribute("userService");
-        redisClient = (RedisClient) getServletContext()
-                .getAttribute("redisClient");
+        userService = (UserService) getServletContext().getAttribute("userService");
+        redisClient = (RedisClient) getServletContext().getAttribute("redisClient");
     }
 
     @Override

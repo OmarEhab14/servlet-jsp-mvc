@@ -14,6 +14,7 @@ CREATE TABLE products
     name           VARCHAR(100) NOT NULL,
     description    TEXT,
     price          DOUBLE       NOT NULL,
+    image_url      VARCHAR(255),
     stock_quantity INT          NOT NULL
 );
 

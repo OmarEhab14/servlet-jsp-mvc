@@ -12,11 +12,11 @@
 </head>
 <body>
 
-<h1>${error.status}</h1>
+<h1>${error.status()}</h1>
 
-<h2>${error.title}</h2>
+<h2>${error.title()}</h2>
 
-<p>${error.detail}</p>
+<p>${error.detail()}</p>
 
 </body>
 </html>

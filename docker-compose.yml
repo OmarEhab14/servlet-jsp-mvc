@@ -11,7 +11,7 @@ services:
     networks:
       - adv_network
     ports:
-      - "3306:3306"
+      - "3307:3306"
     restart: "unless-stopped"
 
   redis:

@@ -57,6 +57,7 @@ public class ProductController extends HttpServlet {
             product.setPrice(
                     Double.parseDouble(req.getParameter("price"))
             );
+            product.setImageUrl(req.getParameter("imageUrl"));
             product.setStockQuantity(
                     Integer.parseInt(req.getParameter("stockQuantity"))
             );

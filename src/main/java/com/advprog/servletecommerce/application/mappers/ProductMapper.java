@@ -1,14 +1,8 @@
 package com.advprog.servletecommerce.application.mappers;
 
-import java.util.List;
-
 import com.advprog.servletecommerce.domain.dto.ProductDetailsDto;
 import com.advprog.servletecommerce.domain.dto.ProductDto;
-import com.advprog.servletecommerce.domain.dto.RegisterRequestDto;
 import com.advprog.servletecommerce.domain.entities.Product;
-import com.advprog.servletecommerce.domain.entities.ProductDetails;
-import com.advprog.servletecommerce.domain.entities.User;
-import com.advprog.servletecommerce.domain.enums.Role;
 
 public class ProductMapper {
     public static Product toEntity(ProductDto productDto) {
@@ -33,6 +27,7 @@ public class ProductMapper {
                       .name(productDetailsDto.name())
                       .price(productDetailsDto.price())
                       .description(productDetailsDto.description())
+                      .imageUrl(productDetailsDto.imageUrl())
                       .stockQuantity(productDetailsDto.stockQuantity())
                       .build();
     }
@@ -42,6 +37,7 @@ public class ProductMapper {
                          .name(product.getName())
                          .price(product.getPrice())
                          .description(product.getDescription())
+                         .imageUrl(product.getImageUrl())
                          .stockQuantity(product.getStockQuantity())
                          .build();
     }

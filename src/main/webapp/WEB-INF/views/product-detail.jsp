@@ -11,14 +11,26 @@
 
 <!-- Product Details -->
 <div class="product-container">
+
+    <img
+            src="${product.imageUrl()}"
+            alt="${product.name()}"
+            width="300"
+            style="border-radius: 10px;"
+    />
+
     <h1>${product.name()}</h1>
+
     <h2>Price: $${product.price()}</h2>
 
-    <p><strong>Status:</strong>
+    <p>
+        <strong>Status:</strong>
+
         <c:choose>
             <c:when test="${product.stockQuantity() > 0}">
                 In Stock (${product.stockQuantity()} available)
             </c:when>
+
             <c:otherwise>
                 <span style="color: red;">Out of Stock</span>
             </c:otherwise>
@@ -28,15 +40,25 @@
     <hr>
 
     <h3>Description</h3>
+
     <p>${product.description()}</p>
 
-    <!-- Add to Cart Form (POST) -->
     <c:if test="${product.stockQuantity() > 0}">
         <form action="${pageContext.request.contextPath}/cart/add" method="post">
-            <input type="hidden" name="productId" value="${product.id()}">
-            <button type="submit">Add to Cart</button>
+
+            <input
+                    type="hidden"
+                    name="productId"
+                    value="${product.id()}"
+            >
+
+            <button type="submit">
+                Add to Cart
+            </button>
+
         </form>
     </c:if>
+
 </div>
 
 </body>

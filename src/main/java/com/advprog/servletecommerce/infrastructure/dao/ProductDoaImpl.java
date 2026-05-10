@@ -153,6 +153,7 @@ public class ProductDoaImpl implements ProductDao {
                 rs.getString("name"),
                 rs.getString("description"),
                 rs.getDouble("price"),
+                rs.getString("image_url"),
                 rs.getInt("stock_quantity")
         );
     }private ProductDetails mapResultSetToProductDetails(ResultSet rs, List<Review> reviews) throws SQLException {

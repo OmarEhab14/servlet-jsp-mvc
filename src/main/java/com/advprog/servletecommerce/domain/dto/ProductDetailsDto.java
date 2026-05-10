@@ -11,7 +11,7 @@ public record ProductDetailsDto(
         String description,
         Double price,
         Integer stockQuantity,
+        String imageUrl,
         List<Review>reviews
-
 ) {
 }

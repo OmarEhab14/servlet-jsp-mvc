@@ -1,9 +1,11 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
+import com.advprog.servletecommerce.application.exceptions.AppException;
 import com.advprog.servletecommerce.application.exceptions.ValidationException;
 import com.advprog.servletecommerce.application.service.ReviewService;
 import com.advprog.servletecommerce.configs.AppConfig;
-import com.advprog.servletecommerce.domain.dto.CreateReviewRequestDto;
+import com.advprog.servletecommerce.domain.dto.ReviewRequestDto;
 import com.advprog.servletecommerce.domain.entities.Review;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +15,6 @@ import lombok.Builder;
 import java.io.IOException;
 import java.util.List;
 
-@Builder
 @WebServlet("/reviews/*")
 public class ReviewController extends HttpServlet {
     private ReviewService reviewService;
@@ -22,31 +23,37 @@ public class ReviewController extends HttpServlet {
         reviewService = AppConfig.getReviewService();
     }
 
-
+    ///  /reviews/
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        Long userId = (Long) request.getAttribute("userId");
-        Long productId = Long.parseLong(request.getParameter("productId"));
-        int rating = Integer.parseInt(request.getParameter("rating"));
-        String comment = request.getParameter("comment");
-        CreateReviewRequestDto reviewDto = new CreateReviewRequestDto(userId, productId, rating, comment
-        );
-
+            throws IOException, ServletException {
+        ///  userId injected in AuthFilter
         try {
+            Long userId = (Long) request.getAttribute("userId");
 
+            Long productId = extractProductId(request);
+                ///  from request body in GUI
+            int rating = Integer.parseInt(request.getParameter("rating"));
+            String comment = request.getParameter("comment");
+            ReviewRequestDto reviewDto = new ReviewRequestDto(userId, productId, rating, comment
+            );
+            reviewService.createReview(reviewDto);
 
+            response.sendRedirect(request.getContextPath() + "/reviews/product/" + productId);
+        }
+        catch (ValidationException e) {
+            request.setAttribute(
+                    "error",
+                    e.getMessage());
 
-            Review saved = reviewService.createReview(reviewDto);
+            request.getRequestDispatcher(
+                            "/WEB-INF/views/reviews/review.jsp")
+                    .forward(request, response);
+        }
 
-//            writeJson(response, saved, 201);
-
-        } catch (ValidationException ex) {
-            request.setAttribute("error", ex);
-            request.setAttribute("oldDto", reviewDto);
-
-//            request.getRequestDispatcher("/WEB-INF/views/auth/register.jsp")
-//                    .forward(request, response);
+        catch (Exception e) {
+            request.setAttribute("error", e.getMessage());
+            response.sendError(500);
         }
     }
 
@@ -55,18 +62,41 @@ public class ReviewController extends HttpServlet {
             throws IOException {
 
         try {
-            String path = request.getPathInfo();
 
-            // /reviews/product/{id}
-            if (path != null && path.startsWith("/product/")) {
-
-                Long productId = Long.parseLong(path.split("/")[2]);
-
+                // /reviews/product/{id}
+                Long productId = extractProductId(request);
                 List<Review> reviews = reviewService.getProductReviews(productId);
 
-            }
+                request.setAttribute("reviews", reviews);
+                /// GUI of review
+                request.getRequestDispatcher("/WEB-INF/views/reviews/review.jsp").forward(request, response);
 
-        } catch (Exception e) {
+        } catch (AppException e) {
+            request.setAttribute("error", e.getMessage());
+        } catch (ServletException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private Long extractProductId(HttpServletRequest request) {
+
+        String path = request.getPathInfo();
+
+        if (path == null) {
+            throw new IllegalArgumentException("Missing path");
+        }
+
+        String[] parts = path.split("/");
+
+        //  /product/{id}
+        if (parts.length < 3 || !"product".equals(parts[1])) {
+            throw new IllegalArgumentException("Invalid URL format");
+        }
+
+        try {
+            return Long.parseLong(parts[2]);
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid product id");
         }
     }
 }

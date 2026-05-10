@@ -40,7 +40,7 @@ public class ReviewDaoImpl implements ReviewDao {
             return review;
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
-            throw new InternalServerErrorException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class ReviewDaoImpl implements ReviewDao {
             }
         } catch (SQLException e) {
             log.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("Something went wrong when trying to find reviews", e);
         }
 
         return reviews;
@@ -76,13 +76,13 @@ public class ReviewDaoImpl implements ReviewDao {
         try (
                 Connection conn = dataSource.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(query)
-                ){
+        ) {
             stmt.setLong(1, userId);
             stmt.setLong(2, productId);
 
             ResultSet rs = stmt.executeQuery();
             return rs.next(); /// return true if exist , else return false
-        }catch (SQLException e){
+        } catch (SQLException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
@@ -90,15 +90,15 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public double getAverageRating(Long productId) {
-        String  query = "SELECT avg(rating) FROM reviews WHERE product_id = ? LIMIT 1";
+        String query = "SELECT avg(rating) FROM reviews WHERE product_id = ? LIMIT 1";
 
         try (
                 Connection conn = dataSource.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(query)){
+                PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setLong(1, productId);
 
             ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 return rs.getDouble(1);
             }
         } catch (SQLException e) {
@@ -110,17 +110,16 @@ public class ReviewDaoImpl implements ReviewDao {
 
     }
 
-///  helper method
+    ///  helper method
     private Review mapResultSetToReview(ResultSet rs) throws SQLException {
-        Review r = new Review();
+        return new Review(
+                rs.getLong("id"),
+                rs.getLong("user_id"),
+                rs.getLong("product_id"),
+                rs.getInt("rating"),
+                rs.getString("comment"),
+                rs.getTimestamp("created_at").toLocalDateTime()
 
-        r.setId(rs.getLong("id"));
-        r.setUserId(rs.getLong("user_id"));
-        r.setProductId(rs.getLong("product_id"));
-        r.setRating(rs.getInt("rating"));
-        r.setComment(rs.getString("comment"));
-        r.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
-
-        return r;
+        );
     }
 }

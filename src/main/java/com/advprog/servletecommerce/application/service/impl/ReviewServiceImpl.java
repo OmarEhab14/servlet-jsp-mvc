@@ -4,7 +4,7 @@ import com.advprog.servletecommerce.application.mappers.ReviewMapper;
 import com.advprog.servletecommerce.application.service.ReviewService;
 import com.advprog.servletecommerce.application.validators.ReviewValidator;
 import com.advprog.servletecommerce.domain.dao.ReviewDao;
-import com.advprog.servletecommerce.domain.dto.CreateReviewRequestDto;
+import com.advprog.servletecommerce.domain.dto.ReviewRequestDto;
 import com.advprog.servletecommerce.domain.entities.Review;
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +16,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewDao reviewDao;
     private final  ReviewValidator reviewValidator;
     @Override
-    public Review createReview(CreateReviewRequestDto review) {
+    public Review createReview(ReviewRequestDto review) {
 
         reviewValidator.validateRating(review);
 

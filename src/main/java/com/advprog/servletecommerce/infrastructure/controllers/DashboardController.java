@@ -1,9 +1,8 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
 
 import com.advprog.servletecommerce.application.service.UserService;
-import com.advprog.servletecommerce.application.service.impl.UserServiceImpl;
-import com.advprog.servletecommerce.configs.AppConfig;
 import com.advprog.servletecommerce.domain.entities.User;
+import com.advprog.servletecommerce.domain.enums.Role;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,12 +16,17 @@ public class DashboardController extends HttpServlet {
     private UserService userService;
     @Override
     public void init() throws ServletException {
-        userService = AppConfig.getUserService();
+        userService = (UserService) getServletContext().getAttribute("userService");
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long userId = (Long) req.getAttribute("userId");
         User user = userService.getUserById(userId);
+        Role role = user.getRole();
+        if (role == Role.USER) {
+            resp.sendRedirect(req.getContextPath() + "/home");
+            return;
+        }
         req.setAttribute("firstName", user.getFirstName());
         req.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(req, resp);
     }

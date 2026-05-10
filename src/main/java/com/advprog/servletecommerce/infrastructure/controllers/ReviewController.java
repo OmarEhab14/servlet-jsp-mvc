@@ -1,8 +1,7 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
-import com.advprog.servletecommerce.application.exceptions.AppException;
+
 import com.advprog.servletecommerce.application.exceptions.ValidationException;
 import com.advprog.servletecommerce.application.service.ReviewService;
-import com.advprog.servletecommerce.configs.AppConfig;
 import com.advprog.servletecommerce.domain.dto.ReviewRequestDto;
 import com.advprog.servletecommerce.domain.entities.Review;
 import jakarta.servlet.ServletException;
@@ -10,18 +9,19 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Builder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.List;
 
+@Slf4j
 @WebServlet("/reviews/*")
 public class ReviewController extends HttpServlet {
     private ReviewService reviewService;
     @Override
     public void init() {
-        reviewService = AppConfig.getReviewService();
-    }
+
+        reviewService = (ReviewService) getServletContext().getAttribute("reviewService");    }
 
     ///  /reviews/
     @Override
@@ -39,7 +39,7 @@ public class ReviewController extends HttpServlet {
             );
             reviewService.createReview(reviewDto);
 
-            response.sendRedirect(request.getContextPath() + "/reviews/product/" + productId);
+            response.sendRedirect(request.getContextPath() + "/products/" + productId);
         }
         catch (ValidationException e) {
             request.setAttribute(
@@ -47,21 +47,14 @@ public class ReviewController extends HttpServlet {
                     e.getMessage());
 
             request.getRequestDispatcher(
-                            "/WEB-INF/views/reviews/review.jsp")
+                            "/WEB-INF/views/product-detail.jsp")
                     .forward(request, response);
-        }
-
-        catch (Exception e) {
-            request.setAttribute("error", e.getMessage());
-            response.sendError(500);
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
-        try {
+            throws IOException, ServletException {
 
                 // /reviews/product/{id}
                 Long productId = extractProductId(request);
@@ -69,19 +62,14 @@ public class ReviewController extends HttpServlet {
 
                 request.setAttribute("reviews", reviews);
                 /// GUI of review
-                request.getRequestDispatcher("/WEB-INF/views/reviews/review.jsp").forward(request, response);
-
-        } catch (AppException e) {
-            request.setAttribute("error", e.getMessage());
-        } catch (ServletException e) {
-            throw new RuntimeException(e);
-        }
+                request.getRequestDispatcher("/WEB-INF/views/product-detail.jsp").forward(request, response);
     }
 
     private Long extractProductId(HttpServletRequest request) {
 
         String path = request.getPathInfo();
 
+        log.info("Extract product id from path: {}", path);
         if (path == null) {
             throw new IllegalArgumentException("Missing path");
         }
@@ -94,6 +82,8 @@ public class ReviewController extends HttpServlet {
         }
 
         try {
+            log.info("parts[2] from path: {}", parts[2]);
+
             return Long.parseLong(parts[2]);
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException("Invalid product id");

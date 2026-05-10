@@ -3,7 +3,6 @@ package com.advprog.servletecommerce.infrastructure.controllers;
 import com.advprog.servletecommerce.application.exceptions.ValidationException;
 import com.advprog.servletecommerce.application.security.SessionManager;
 import com.advprog.servletecommerce.application.service.UserService;
-import com.advprog.servletecommerce.configs.AppConfig;
 import com.advprog.servletecommerce.domain.dto.AuthResponseDto;
 import com.advprog.servletecommerce.domain.dto.LoginRequestDto;
 import com.advprog.servletecommerce.domain.enums.Role;
@@ -13,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import redis.clients.jedis.RedisClient;
+
 import java.io.IOException;
 
 @WebServlet("/auth/login")
@@ -22,8 +22,8 @@ public class LoginController extends HttpServlet {
 
     @Override
     public void init() {
-        userService = AppConfig.getUserService();
-        redisClient = AppConfig.getRedisClient();
+        userService = (UserService) getServletContext().getAttribute("userService");
+        redisClient = (RedisClient) getServletContext().getAttribute("redisClient");
     }
 
     @Override

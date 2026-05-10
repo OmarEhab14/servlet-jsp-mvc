@@ -1,6 +1,5 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
 
-import com.advprog.servletecommerce.configs.AppConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -16,8 +15,7 @@ public class LogoutController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        redisClient = AppConfig.getRedisClient();
-    }
+        redisClient = (RedisClient) getServletContext().getAttribute("redisClient");    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

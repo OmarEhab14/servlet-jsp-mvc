@@ -70,7 +70,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public boolean existsByUserAndProduct(Long userId, Long productId) {
-        String query = "SELECT  1 FROM reviews WHERE user_id = ? AND product_id = ? LIMIT 1";
+        String query = "SELECT 1 FROM reviews WHERE user_id = ? AND product_id = ? LIMIT 1";
 
 
         try (

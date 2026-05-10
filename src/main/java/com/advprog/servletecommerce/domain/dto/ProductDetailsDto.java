@@ -7,6 +7,7 @@ public record ProductDetailsDto(
         String name,
         String description,
         Double price,
+        String imageUrl,
         Integer stockQuantity
 ) {
 }

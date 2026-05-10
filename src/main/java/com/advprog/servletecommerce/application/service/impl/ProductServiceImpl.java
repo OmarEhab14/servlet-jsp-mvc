@@ -12,6 +12,7 @@ import com.advprog.servletecommerce.domain.dao.ProductDao;
 import com.advprog.servletecommerce.domain.dto.ProductDetailsDto;
 import com.advprog.servletecommerce.domain.dto.ProductDto;
 import com.advprog.servletecommerce.domain.entities.Product;
+import com.advprog.servletecommerce.domain.entities.ProductDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.RedisClient;

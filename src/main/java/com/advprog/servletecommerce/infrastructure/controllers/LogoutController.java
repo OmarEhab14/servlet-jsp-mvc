@@ -15,9 +15,7 @@ public class LogoutController extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        redisClient = (RedisClient) getServletContext()
-                .getAttribute("redisClient");
-    }
+        redisClient = (RedisClient) getServletContext().getAttribute("redisClient");    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

@@ -31,7 +31,7 @@ public class ProductMapper {
                       .stockQuantity(productDetailsDto.stockQuantity())
                       .build();
     }
-    public static ProductDetailsDto toDetailsDto(Product product){
+    public static ProductDetailsDto toDetailsDto(ProductDetails product){
         return ProductDetailsDto.builder()
                          .id(product.getId())
                          .name(product.getName())

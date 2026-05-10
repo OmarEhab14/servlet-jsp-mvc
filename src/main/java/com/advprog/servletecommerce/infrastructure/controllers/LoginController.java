@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import redis.clients.jedis.RedisClient;
+
 import java.io.IOException;
 
 @WebServlet("/auth/login")
@@ -21,10 +22,8 @@ public class LoginController extends HttpServlet {
 
     @Override
     public void init() {
-        userService = (UserService) getServletContext()
-                .getAttribute("userService");
-        redisClient = (RedisClient) getServletContext()
-                .getAttribute("redisClient");
+        userService = (UserService) getServletContext().getAttribute("userService");
+        redisClient = (RedisClient) getServletContext().getAttribute("redisClient");
     }
 
     @Override

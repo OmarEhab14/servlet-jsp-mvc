@@ -13,11 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Product {
+public class ProductDetails {
     private Long id;
     private String name;
     private String description;
     private Double price;
-    private String imageUrl;
     private Integer stockQuantity;
+    private List<Review> reviews;
 }

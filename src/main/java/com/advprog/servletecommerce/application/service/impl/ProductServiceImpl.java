@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
                 return mapper.readValue(cachedData, ProductDetailsDto.class);
             }
             log.info("Retrieve product {} from db",id);
-            Product p = productDao.findById(id).orElseThrow(() -> new NotFoundException("Product not Found"));
+            ProductDetails p = productDao.findById(id).orElseThrow(() -> new NotFoundException("Product not Found"));
             ProductDetailsDto dto=ProductMapper.toDetailsDto(p);
             redis.set(key, mapper.writeValueAsString(dto), SetParams.setParams().ex(CACHE_EXPIRY_SECONDS));
             return dto;

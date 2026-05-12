@@ -1,5 +1,6 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
 
+import com.advprog.servletecommerce.application.security.JwtUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -29,6 +30,31 @@ public class LogoutController extends HttpServlet {
                     cookie.setValue("");
                     resp.addCookie(cookie);
                 }
+            }
+        }
+
+        String authHeader =
+                req.getHeader("Authorization");
+
+        if (authHeader != null &&
+                authHeader.startsWith("Bearer ")) {
+
+            String token = authHeader.substring(7);
+
+            long remainingSeconds =
+                    JwtUtil.getRemainingExpiration(token) / 1000;
+
+            if (remainingSeconds > 0) {
+
+                redisClient.set(
+                        "blacklist:" + token,
+                        "true"
+                );
+
+                redisClient.expire(
+                        "blacklist:" + token,
+                        remainingSeconds
+                );
             }
         }
         resp.sendRedirect("/auth/login");

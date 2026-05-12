@@ -80,6 +80,14 @@ public class AuthFilter implements Filter {
         String authHeader = httpRequest.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
+
+            String blacklisted =
+                    redisClient.get("blacklist:" + token);
+
+            if (blacklisted != null) {
+                throw new UnauthorizedException();
+            }
+
             if (JwtUtil.validateToken(token)) {
                 Claims claims = JwtUtil.getClaims(token);
                 httpRequest.setAttribute("userId", claims.get("userId"));

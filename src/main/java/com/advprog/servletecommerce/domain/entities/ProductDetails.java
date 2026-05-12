@@ -20,6 +20,5 @@ public class ProductDetails {
     private Double price;
     private String imageUrl;
     private Integer stockQuantity;
-    private String imageUrl;
     private List<Review> reviews;
 }

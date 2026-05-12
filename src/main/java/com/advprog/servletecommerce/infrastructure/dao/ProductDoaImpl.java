@@ -177,8 +177,8 @@ public class ProductDoaImpl implements ProductDao {
                 rs.getString("name"),
                 rs.getString("description"),
                 rs.getDouble("price"),
-                rs.getInt("stock_quantity"),
                 rs.getString("image_url"),
+                rs.getInt("stock_quantity"),
                 reviews
         );
     }

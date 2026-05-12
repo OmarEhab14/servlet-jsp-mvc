@@ -45,4 +45,21 @@ public class JwtUtil {
                 .parseSignedClaims(token)
                 .getPayload();
     }
+
+    public static Date getExpiration(String token) {
+
+        return Jwts.parser()
+                .verifyWith(SECRET_KEY)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration();
+    }
+
+    public static long getRemainingExpiration(String token) {
+
+        Date expiration = getClaims(token).getExpiration();
+
+        return expiration.getTime() - System.currentTimeMillis();
+    }
 }

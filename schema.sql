@@ -24,6 +24,8 @@ CREATE TABLE reviews
     user_id    BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
     comment    TEXT,
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (product_id) REFERENCES products (id)
+    rating     INT          NOT NULL CHECK (rating >= 1 AND rating <= 5),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products (id) ON DELETE CASCADE
 );

@@ -6,6 +6,7 @@ import com.advprog.servletecommerce.application.service.impl.ProductServiceImpl;
 import com.advprog.servletecommerce.application.service.impl.UserServiceImpl;
 import com.advprog.servletecommerce.domain.dto.ProductDto;
 import com.advprog.servletecommerce.domain.entities.User;
+import com.advprog.servletecommerce.domain.enums.Role;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -30,6 +31,11 @@ public class DashboardController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Long userId = (Long) req.getAttribute("userId");
         User user = userService.getUserById(userId);
+
+        if (user.getRole() == Role.USER) {
+            resp.sendRedirect(req.getContextPath() + "/home");
+            return;
+        }
 
         List<ProductDto> products = productService.getAllProducts();
 

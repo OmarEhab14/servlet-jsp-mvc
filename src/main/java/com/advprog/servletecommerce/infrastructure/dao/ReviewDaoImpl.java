@@ -18,7 +18,7 @@ public class ReviewDaoImpl implements ReviewDao {
 
     @Override
     public Review save(Review review) {
-        String query = "INSERT INTO reviews (user_id, product_id, rating, comment) VALUES (?, ?, ?, ?, ?)";
+        String query = "INSERT INTO reviews (user_id, product_id, rating, comment) VALUES (?, ?, ?, ?)";
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setLong(1, review.getUserId());

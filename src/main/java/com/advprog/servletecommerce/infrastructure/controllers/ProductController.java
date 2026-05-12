@@ -1,6 +1,7 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.advprog.servletecommerce.application.enums.HttpStatus;
 import com.advprog.servletecommerce.application.exceptions.AppException;
@@ -8,9 +9,12 @@ import com.advprog.servletecommerce.application.exceptions.InternalServerErrorEx
 import com.advprog.servletecommerce.application.exceptions.InvalidProductIdException;
 import com.advprog.servletecommerce.application.mappers.ProductMapper;
 import com.advprog.servletecommerce.application.service.ProductService;
+import com.advprog.servletecommerce.application.service.ReviewService;
 import com.advprog.servletecommerce.application.service.impl.ProductServiceImpl;
+import com.advprog.servletecommerce.application.service.impl.ReviewServiceImpl;
 import com.advprog.servletecommerce.domain.dto.ProductDetailsDto;
 import com.advprog.servletecommerce.domain.entities.Product;
+import com.advprog.servletecommerce.domain.entities.Review;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,11 +24,14 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet("/products")
 public class ProductController extends HttpServlet {
     private ProductService productService;
+    private ReviewService reviewService;
 
     @Override
     public void init() throws ServletException {
         productService = (ProductServiceImpl) getServletContext()
                 .getAttribute("productService");
+        reviewService = (ReviewServiceImpl) getServletContext()
+                .getAttribute("reviewService");
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -38,8 +45,10 @@ public class ProductController extends HttpServlet {
         try {
             Long productId = Long.parseLong(idParam);
             ProductDetailsDto product = productService.getProduct(productId);
+            List<Review> reviews = reviewService.getProductReviews(productId);
 
             req.setAttribute("product", product);
+            req.setAttribute("reviews", reviews);
             req.getRequestDispatcher("/WEB-INF/views/product-detail.jsp").forward(req, resp);
 
         } catch (NumberFormatException e) {
@@ -49,6 +58,9 @@ public class ProductController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String action = req.getParameter("action");
+        if (action == null || action.trim().isEmpty()) {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Action is required.");
+        }
         if(action.equals("create")) {
             Product product = new Product();
 
@@ -61,7 +73,6 @@ public class ProductController extends HttpServlet {
             product.setStockQuantity(
                     Integer.parseInt(req.getParameter("stockQuantity"))
             );
-
             productService.createProduct(product);
         }
         else if(action.equals("delete")){

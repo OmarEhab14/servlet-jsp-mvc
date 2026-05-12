@@ -1,75 +1,82 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: omar-ehab
-  Date: 5/7/26
-  Time: 11:04 PM
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<!DOCTYPE html>
 <html>
-<form method="post" action="/auth/register">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+  <link rel="stylesheet" type="text/css"
+        href="${pageContext.request.contextPath}/css/styles.css">
+</head>
+<body>
+<div class="container">
+  <div class="form-wrapper">
+    <h2>Create Account</h2>
 
-  <input
-          type="text"
-          name="firstName"
-          value="${oldDto.firstName()}"
-          placeholder="First Name"
-  />
+    <form method="post" action="${pageContext.request.contextPath}/auth/register">
 
-  <c:if test="${error.errors['firstName'] != null}">
-    <span>${error.errors['firstName']}</span>
-  </c:if>
+      <div class="form-group">
+        <input
+                type="text"
+                name="firstName"
+                value="${oldDto.firstName()}"
+                placeholder="First Name"
+                class="form-input"
+        />
+        <c:if test="${error.errors['firstName'] != null}">
+          <span class="field-error">${error.errors['firstName']}</span>
+        </c:if>
+      </div>
 
-  <br>
+      <div class="form-group">
+        <input
+                type="text"
+                name="lastName"
+                value="${oldDto.lastName()}"
+                placeholder="Last Name"
+                class="form-input"
+        />
+        <c:if test="${error.errors['lastName'] != null}">
+          <span class="field-error">${error.errors['lastName']}</span>
+        </c:if>
+      </div>
 
-  <input
-          type="text"
-          name="lastName"
-          value="${oldDto.lastName()}"
-          placeholder="Last Name"
-  />
+      <div class="form-group">
+        <input
+                type="email"
+                name="email"
+                value="${oldDto.email()}"
+                placeholder="Email"
+                class="form-input"
+        />
+        <c:if test="${error.errors['email'] != null}">
+          <span class="field-error">${error.errors['email']}</span>
+        </c:if>
+      </div>
 
-  <c:if test="${error.errors['lastName'] != null}">
-    <span>${error.errors['lastName']}</span>
-  </c:if>
+      <div class="form-group">
+        <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                class="form-input"
+        />
+        <c:if test="${error.errors['password'] != null}">
+          <span class="field-error">${error.errors['password']}</span>
+        </c:if>
+      </div>
 
-  <br>
+      <button type="submit" class="btn btn-primary">
+        Register
+      </button>
+    </form>
 
-  <input
-          type="email"
-          name="email"
-          value="${oldDto.email()}"
-          placeholder="Email"
-  />
-
-  <c:if test="${error.errors['email'] != null}">
-    <span>${error.errors['email']}</span>
-  </c:if>
-
-  <br>
-
-  <input
-          type="password"
-          name="password"
-          placeholder="Password"
-  />
-
-  <c:if test="${error.errors['password'] != null}">
-    <span>${error.errors['password']}</span>
-  </c:if>
-
-  <br>
-
-  <button type="submit">
-    Register
-  </button>
-
-</form>
-
-<p>
-  Already have an account?
-  <a href="${pageContext.request.contextPath}/auth/login">
-    Login here
-  </a>
-</p>
+    <p class="form-footer">
+      Already have an account?
+      <a href="${pageContext.request.contextPath}/auth/login">Login here</a>
+    </p>
+  </div>
+</div>
+</body>
 </html>

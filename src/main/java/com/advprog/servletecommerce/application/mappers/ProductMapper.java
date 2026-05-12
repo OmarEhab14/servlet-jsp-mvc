@@ -30,6 +30,7 @@ public class ProductMapper {
                       .description(productDetailsDto.description())
                       .imageUrl(productDetailsDto.imageUrl())
                       .stockQuantity(productDetailsDto.stockQuantity())
+                      .imageUrl(productDetailsDto.imageUrl())
                       .build();
     }
     public static ProductDetailsDto toDetailsDto(ProductDetails product){
@@ -38,8 +39,8 @@ public class ProductMapper {
                          .name(product.getName())
                          .price(product.getPrice())
                          .description(product.getDescription())
-                         .imageUrl(product.getImageUrl())
                          .stockQuantity(product.getStockQuantity())
+                         .imageUrl(product.getImageUrl())
                          .build();
     }
 }

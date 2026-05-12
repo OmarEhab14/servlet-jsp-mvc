@@ -38,6 +38,18 @@ public class AuthFilter implements Filter {
             return;
         }
 
+        if (path.startsWith("/css/") ||
+                path.startsWith("/js/") ||
+                path.startsWith("/images/") ||
+                path.endsWith(".css") ||
+                path.endsWith(".js") ||
+                path.endsWith(".png") ||
+                path.endsWith(".jpg") ||
+                path.endsWith(".ico")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         String sessionId = null;
         Cookie[] cookies = httpRequest.getCookies();
         if (cookies != null) {

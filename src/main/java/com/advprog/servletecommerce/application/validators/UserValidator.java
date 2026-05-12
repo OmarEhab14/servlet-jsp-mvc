@@ -38,7 +38,7 @@ public class UserValidator {
         if (registerRequestDto.password() == null || registerRequestDto.password().trim().isEmpty()) {
             errors.put("password", "Password is required");
         } else if (!registerRequestDto.password().matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$")) {
-            errors.put("password", "Invalid password");
+            errors.put("password", "Password must be at least 8 characters and include uppercase, lowercase, number, and special character");
         }
 
         if (!errors.isEmpty()) {

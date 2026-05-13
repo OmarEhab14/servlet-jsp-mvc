@@ -30,11 +30,14 @@ public class HomeController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long userId = (Long) req.getAttribute("userId");
-        if (userId == null) {
+        Object attr = req.getAttribute("userId");
+
+        if (attr == null) {
             resp.sendRedirect(req.getContextPath() + "/auth/login");
             return;
         }
+
+        Long userId = ((Number) attr).longValue();
         User user = userService.getUserById(userId);
         Role role = user.getRole();
         if (role == Role.ADMIN) {

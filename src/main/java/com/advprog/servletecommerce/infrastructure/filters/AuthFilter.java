@@ -77,10 +77,24 @@ public class AuthFilter implements Filter {
 //            return;
 //        }
 
-        String authHeader = httpRequest.getHeader("Authorization");
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
+        String token = null;
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("TOKEN")) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
 
+        if (token == null) {
+            String authHeader = httpRequest.getHeader("Authorization");
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                token = authHeader.substring(7);
+            }
+        }
+
+        if (token != null) {
             String blacklisted =
                     redisClient.get("blacklist:" + token);
 

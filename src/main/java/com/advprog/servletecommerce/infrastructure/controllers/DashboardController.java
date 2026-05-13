@@ -29,7 +29,14 @@ public class DashboardController extends HttpServlet {
     }
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Long userId = (Long) req.getAttribute("userId");
+        Object attr = req.getAttribute("userId");
+
+        if (attr == null) {
+            resp.sendRedirect(req.getContextPath() + "/auth/login");
+            return;
+        }
+
+        Long userId = ((Number) attr).longValue();
         User user = userService.getUserById(userId);
 
         if (user.getRole() == Role.USER) {

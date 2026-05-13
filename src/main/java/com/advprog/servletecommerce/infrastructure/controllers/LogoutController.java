@@ -30,6 +30,12 @@ public class LogoutController extends HttpServlet {
                     cookie.setValue("");
                     resp.addCookie(cookie);
                 }
+                if (cookie.getName().equals("TOKEN")) {
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/");
+                    cookie.setValue("");
+                    resp.addCookie(cookie);
+                }
             }
         }
 

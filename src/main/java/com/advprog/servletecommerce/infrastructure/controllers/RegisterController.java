@@ -1,6 +1,7 @@
 package com.advprog.servletecommerce.infrastructure.controllers;
 
 import com.advprog.servletecommerce.application.exceptions.ValidationException;
+import com.advprog.servletecommerce.application.security.CookieManager;
 import com.advprog.servletecommerce.application.security.SessionManager;
 import com.advprog.servletecommerce.application.service.UserService;
 import com.advprog.servletecommerce.domain.dto.AuthResponseDto;
@@ -37,6 +38,8 @@ public class RegisterController extends HttpServlet {
         );
         try {
             AuthResponseDto responseDto = userService.register(requestDto);
+
+            CookieManager.attachToken(response, responseDto.token());
 
             SessionManager.attachSession(response, redisClient, responseDto.id());
 

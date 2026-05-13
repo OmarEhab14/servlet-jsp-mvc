@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${product.name} - Product Details</title>
+    <title>${product.name()} - Product Details</title>
     <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/css/styles.css">
 </head>
@@ -26,9 +26,9 @@
             <div class="product-detail-container">
                 <div class="product-image-wrapper">
                     <c:choose>
-                        <c:when test="${not empty product.imageUrl}">
-                            <img src="${product.imageUrl}"
-                                 alt="${product.name}"
+                        <c:when test="${not empty product.imageUrl()}">
+                            <img src="${product.imageUrl()}"
+                                 alt="${product.name()}"
                                  class="product-image"
                         </c:when>
                         <c:otherwise>
@@ -41,17 +41,17 @@
 
                 <div class="product-detail-info">
                     <div class="product-detail-header">
-                        <h1 class="product-detail-title">${product.name}</h1>
-                        <p class="product-detail-price">$${product.price}</p>
+                        <h1 class="product-detail-title">${product.name()}</h1>
+                        <p class="product-detail-price">$${product.price()}</p>
                     </div>
 
-                    <p class="product-detail-description">${product.description}</p>
+                    <p class="product-detail-description">${product.description()}</p>
 
                     <p class="product-detail-stock">
                         <c:choose>
-                            <c:when test="${product.stockQuantity > 0}">
+                            <c:when test="${product.stockQuantity() > 0}">
                                 <span class="stock-badge stock-available">
-                                    ✓ In Stock (${product.stockQuantity} available)
+                                    ✓ In Stock (${product.stockQuantity()} available)
                                 </span>
                             </c:when>
                             <c:otherwise>
@@ -97,7 +97,7 @@
             <h2>Write a Review</h2>
 
             <form method="post" action="${pageContext.request.contextPath}/reviews" class="review-form">
-                <input type="hidden" name="productId" value="${product.id}" />
+                <input type="hidden" name="productId" value="${product.id()}" />
 
                 <div class="form-group rating-form">
                     <label for="rating">Rating</label>

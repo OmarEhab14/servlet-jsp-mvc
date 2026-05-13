@@ -10,7 +10,7 @@ public class DatabaseConfig {
             HikariConfig config = new HikariConfig();
 
             config.setDriverClassName("com.mysql.cj.jdbc.Driver");
-            config.setJdbcUrl("jdbc:mysql://localhost:3306/adv_db");
+            config.setJdbcUrl("jdbc:mysql://localhost:3307/adv_db");
             config.setUsername("root");
             config.setPassword("root");
 

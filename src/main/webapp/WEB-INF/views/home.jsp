@@ -42,12 +42,12 @@
                 <c:forEach var="p" items="${products}">
                     <div class="product-card">
                         <div class="product-info">
-                            <h3 class="product-name">${p.name}</h3>
-                            <p class="product-price">$${p.price}</p>
+                            <h3 class="product-name">${p.name()}</h3>
+                            <p class="product-price">$${p.price()}</p>
                             <p class="product-stock">
                                 <c:choose>
-                                    <c:when test="${p.stockQuantity > 0}">
-                                        <span class="stock-available">In Stock (${p.stockQuantity})</span>
+                                    <c:when test="${p.stockQuantity() > 0}">
+                                        <span class="stock-available">In Stock (${p.stockQuantity()})</span>
                                     </c:when>
                                     <c:otherwise>
                                         <span class="stock-unavailable">Out of Stock</span>
@@ -56,7 +56,7 @@
                             </p>
                         </div>
                         <div class="product-actions">
-                            <a href="${pageContext.request.contextPath}/products?id=${p.id}" class="btn btn-view">
+                            <a href="${pageContext.request.contextPath}/products?id=${p.id()}" class="btn btn-view">
                                 View Details
                             </a>
                         </div>

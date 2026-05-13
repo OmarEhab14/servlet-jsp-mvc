@@ -9,7 +9,8 @@ public record ProductDto(
         Long id,
         String name,
         Double price,
-        Integer stockQuantity
+        Integer stockQuantity,
+        String imageUrl
 //        List<Review> reviews
 ) {
 }

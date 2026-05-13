@@ -20,6 +20,7 @@ public class ProductMapper {
                          .name(product.getName())
                          .price(product.getPrice())
                          .stockQuantity(product.getStockQuantity())
+                         .imageUrl(product.getImageUrl())
                          .build();
     }
     public static Product toEntity(ProductDetailsDto productDetailsDto) {

@@ -76,7 +76,18 @@
 
                 <c:forEach var="p" items="${products}">
                     <div class="product-card">
-
+                        <div class="product-image">
+                            <c:choose>
+                                <c:when test="${not empty p.imageUrl()}">
+                                    <img src="${p.imageUrl()}"
+                                         alt="${p.name()}"
+                                         class="product-img">
+                                </c:when>
+                                <c:otherwise>
+                                    <div class="product-image-placeholder">No image</div>
+                                </c:otherwise>
+                            </c:choose>
+                        </div>
                         <div class="product-info">
                             <h3 class="product-name">${p.name()}</h3>
 
